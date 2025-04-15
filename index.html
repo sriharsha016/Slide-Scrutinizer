@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Scrutinizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            cursor: none;
+        }
+
+        :root {
+            --primary: #4BDFEA;
+            --primary-light: #6EEAF3;
+            --secondary: #2C7BE5;
+            --accent: #00D4FF;
+            --text: #E9ECEF;
+            --text-muted: #8E9BAE;
+            --bg-dark: #1B1E2B;
+            --bg-card: rgba(32, 37, 54, 0.7);
+            --border: rgba(75, 223, 234, 0.2);
+            --glass-bg: rgba(32, 37, 54, 0.25);
+            --glass-border: rgba(75, 223, 234, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), #202536, #2A2F45);
+            background-size: 400% 400%;
+            animation: animatedBackground 15s ease infinite;
+            color: var(--text);
+            padding: 30px;
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="rgba(0,200,255,0.03)" stroke-width="0.5"/></svg>');
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes animatedBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            animation: fadeInZoom 1.2s ease-out;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        h1 { 
+            font-size: 3.8rem; 
+            color: var(--accent); 
+            background: linear-gradient(90deg, var(--accent), var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px rgba(0, 255, 234, 0.3);
+            position: relative;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+        
+        h2 { 
+            font-size: 2rem; 
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.4);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+        }
+
+        @keyframes fadeInZoom {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(75, 223, 234, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(75, 223, 234, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(75, 223, 234, 0.6); }
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInZoom 1.5s ease;
+        }
+
+        input[type="file"], button {
+            padding: 12px 24px;
+            margin: 10px;
+            font-size: 1rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            font-family: 'Roboto Mono', monospace;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.25);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 14px 28px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        input[type="file"]:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow), inset 0 0 20px rgba(75, 223, 234, 0.3);
+            background: linear-gradient(135deg, rgba(75, 223, 234, 0.9), rgba(44, 123, 229, 0.9));
+            backdrop-filter: blur(4px);
+            padding: 16px 32px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 1.05rem;
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(rgba(0, 200, 255, 0.1), rgba(0, 255, 234, 0.1));
+            transform: rotate(30deg);
+            z-index: 1;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.6), inset 0 0 15px rgba(0, 255, 234, 0.4);
+            border-color: var(--accent);
+        }
+        
+        button:hover::after {
+            opacity: 0.7;
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .section {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: var(--glass-shadow);
+            animation: fadeInZoom 1s ease;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+        }
+
+        th, td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+            text-align: center;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        th {
+            background-color: rgba(0, 200, 255, 0.15);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 5px;
+            line-height: 2;
+        }
+
+        li {
+            transition: transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            border-radius: 4px;
+            position: relative;
+            padding-left: 24px;
+            border-left: 2px solid rgba(0, 200, 255, 0.3);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95rem;
+        }
+        
+        li:before {
+            content: '>';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 8px;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px rgba(0, 200, 255, 0.5);
+        }
+
+        li:hover {
+            transform: translateX(5px);
+            color: var(--accent);
+            background-color: rgba(0, 200, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 200, 255, 0.3);
+            border-left-color: var(--accent);
+        }
+
+        .highlight { color: var(--accent); text-shadow: 0 0 5px rgba(0, 255, 234, 0.5); }
+        .info { color: var(--primary); text-shadow: 0 0 5px rgba(0, 200, 255, 0.5); }
+        .error {
+            text-align: center;
+            color: #ff3a5e;
+            font-weight: bold;
+            background-color: rgba(255, 58, 94, 0.1);
+            padding: 12px;
+            border-radius: 4px;
+            border-left: 4px solid #ff3a5e;
+            font-family: 'Roboto Mono', monospace;
+            box-shadow: 0 0 15px rgba(255, 58, 94, 0.3);
+            text-shadow: 0 0 5px rgba(255, 58, 94, 0.5);
+        }
+        
+        .similarity-bar {
+            position: relative;
+            height: 32px;
+            background-color: var(--glass-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            width: 100%;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        
+        .similarity-fill {
+            position: absolute;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: linear-gradient(90deg, var(--secondary), var(--primary), var(--accent));
+            border-radius: 12px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(75, 223, 234, 0.6);
+            animation: pulse 2s infinite;
+        }
+        
+        .similarity-bar span {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            line-height: 32px;
+            text-shadow: 0 0 10px rgba(75, 223, 234, 0.5);
+            z-index: 1;
+            letter-spacing: 1px;
+        }
+
+        .section { 
+            opacity: 0; 
+            transform: translateY(40px); 
+            transition: all 1s cubic-bezier(0.215, 0.61, 0.355, 1); 
+            position: relative;
+        }
+        .section.visible { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+        
+        .section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transform: scaleX(0);
+            transition: transform 1.5s ease;
+        }
+        
+        .section.visible::after {
+            transform: scaleX(1);
+        }
+
+        .floating-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .float-ball {
+            position: absolute;
+            width: 40px; height: 40px;
+            background: rgba(0, 255, 70, 0.08);
+            border-radius: 8px;
+            animation: float 25s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0, 255, 70, 0.15);
+            box-shadow: 0 0 20px rgba(0, 255, 70, 0.1);
+            transform-origin: center;
+        }
+
+        .float-ball:nth-child(2) {
+            animation-duration: 30s;
+            animation-delay: -5s;
+        }
+
+        .float-ball:nth-child(3) {
+            animation-duration: 35s;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); }
+            25% { transform: translateY(-50vh) translateX(25vw) rotate(90deg); }
+            50% { transform: translateY(-100vh) translateX(50vw) rotate(180deg); }
+            75% { transform: translateY(-50vh) translateX(75vw) rotate(270deg); }
+            100% { transform: translateY(0) translateX(0) rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="floating-bg">
+    <div class="float-ball" style="top: 80%; left: 10%;"></div>
+    <div class="float-ball" style="top: 30%; left: 80%; width: 60px; height: 60px;"></div>
+    <div class="float-ball" style="top: 50%; left: 50%; width: 80px; height: 80px;"></div>
+    <div class="float-ball" style="top: 20%; left: 25%; width: 45px; height: 45px;"></div>
+    <div class="float-ball" style="top: 70%; left: 65%; width: 35px; height: 35px;"></div>
+    <div class="float-ball" style="top: 40%; left: 15%; width: 50px; height: 50px;"></div>
+    <div class="float-ball" style="top: 85%; left: 85%; width: 40px; height: 40px;"></div>
+</div>
+
+<h1>Slide Scrutinizer</h1>
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="files" multiple accept=".pptx">
+    <button type="submit">Upload & Check</button>
+</form>
+
+{% if error %}
+<div class="section error">{{ error }}</div>
+{% endif %}
+
+{% if uploaded %}
+<div class="section">
+    <h2 class="info">Uploaded PPTs</h2>
+    <ul>
+        {% for file in uploaded %}
+            <li title="{{ file }}">{{ file.split('_', 1)[1] }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if skipped %}
+<div class="section">
+    <h2 class="highlight">Skipped PPTs (Empty or Unreadable)</h2>
+    <ul>
+        {% for file in skipped %}
+            <li>{{ file }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if duplicates %}
+<div class="section">
+    <h2 class="highlight">Duplicate PPTs Detected</h2>
+    <table>
+        <tr><th>File 1</th><th>File 2</th></tr>
+        {% for dup in duplicates %}
+        <tr>
+            <td title="{{ dup[0] }}">{{ dup[0].split('_', 1)[1] }}</td>
+            <td title="{{ dup[1] }}">{{ dup[1].split('_', 1)[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+
+{% if google_percentages %}
+<div class="section">
+    <h2 class="info">Google Presence Percentage</h2>
+    <table>
+        <tr><th>File</th><th>Google Presence (%)</th></tr>
+        {% for result in google_percentages %}
+        <tr>
+            <td title="{{ result.filename }}">{{ result.filename.split('_', 1)[1] }}</td>
+            <td>{{ result.percentage }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+
+{% if non_duplicates %}
+<div class="section">
+    <h2 class="info">Final Non-Duplicate PPTs</h2>
+    <ul>
+        {% for file in non_duplicates %}
+            <li title="{{ file }}">{{ file.split('_', 1)[1] }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if similarities %}
+<div class="section">
+    <h2 class="highlight">Content Similarity Warnings (>50%)</h2>
+    <table>
+        <tr><th>File 1</th><th>File 2</th><th>Similarity</th></tr>
+        {% for sim in similarities %}
+        <tr>
+            <td title="{{ sim.file1 }}">{{ sim.file1.split('_', 1)[1] }}</td>
+            <td title="{{ sim.file2 }}">{{ sim.file2.split('_', 1)[1] }}</td>
+            <td>
+                <div class="similarity-bar">
+                    <div class="similarity-fill" style="width: {{ sim.similarity }}%;"></div>
+                    <span>{{ sim.similarity }}%</span>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+
+<script>
+    const sections = document.querySelectorAll('.section');
+    const reveal = () => {
+        const triggerBottom = window.innerHeight * 0.9;
+        sections.forEach(section => {
+            const sectionTop = section.getBoundingClientRect().top;
+            if (sectionTop < triggerBottom) {
+                section.classList.add('visible');
+            }
+        });
+    };
+    window.addEventListener('scroll', reveal);
+    reveal();
+</script>
+
+<script>
+class CustomCursor {
+    constructor() {
+        if (CustomCursor.instance) return CustomCursor.instance;
+        CustomCursor.instance = this;
+
+        this.cursor = document.createElement('div');
+        this.cursor.className = 'custom-cursor';
+        this.cursor.style.opacity = '1';
+        
+        // Create outer ring (trail)
+        this.cursorTrail = document.createElement('div');
+        this.cursorTrail.className = 'cursor-trail';
+        
+        // Create inner dot
+        this.cursorDot = document.createElement('div');
+        this.cursorDot.className = 'cursor-dot';
+        
+        // Create pulse effect element
+        this.cursorPulse = document.createElement('div');
+        this.cursorPulse.className = 'cursor-pulse';
+
+        // Assemble cursor components
+        this.cursor.appendChild(this.cursorPulse);
+        this.cursor.appendChild(this.cursorTrail);
+        this.cursor.appendChild(this.cursorDot);
+        document.body.appendChild(this.cursor);
+
+        // Position tracking
+        this.position = { x: 0, y: 0 };
+        this.target = { x: 0, y: 0 };
+        this.velocity = { x: 0, y: 0 };
+        this.isVisible = true;
+        this.isHovering = false;
+        this.isClicking = false;
+
+        this.initStyles();
+        this.initEventListeners();
+        this.animate();
+    }
+
+    initStyles() {
+        const styles = `
+            .custom-cursor {
+                position: fixed;
+                pointer-events: none;
+                z-index: 999999;
+                opacity: 1;
+                transition: opacity 0.3s ease;
+                will-change: transform;
+                top: 0;
+                left: 0;
+                transform: translate3d(0, 0, 0);
+            }
+            .custom-cursor.hidden { opacity: 0; }
+            
+            .cursor-trail {
+                position: absolute;
+                width: 32px;
+                height: 32px;
+                border: 2px solid var(--primary);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                transition: width 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                            height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                            border-color 0.2s ease,
+                            opacity 0.2s ease;
+                box-shadow: 0 0 15px rgba(75, 223, 234, 0.5);
+                mix-blend-mode: screen;
+                backdrop-filter: blur(1px);
+                -webkit-backdrop-filter: blur(1px);
+            }
+            
+            .cursor-dot {
+                position: absolute;
+                width: 8px;
+                height: 8px;
+                background: var(--primary);
+                border-radius: 50%;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                transition: background-color 0.2s ease, transform 0.1s ease;
+                box-shadow: 0 0 12px rgba(75, 223, 234, 0.7);
+                mix-blend-mode: screen;
+            }
+            
+            .cursor-pulse {
+                position: absolute;
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(75, 223, 234, 0.3) 0%, rgba(75, 223, 234, 0) 70%);
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+                transition: opacity 0.3s ease, transform 0.3s ease;
+                mix-blend-mode: screen;
+                filter: blur(2px);
+            }
+            
+            .custom-cursor.hovering .cursor-trail {
+                width: 48px;
+                height: 48px;
+                border-color: var(--accent);
+                border-width: 3px;
+                box-shadow: 0 0 25px rgba(0, 212, 255, 0.7);
+                opacity: 0.95;
+            }
+            
+            .custom-cursor.hovering .cursor-dot {
+                background: var(--accent);
+                transform: translate(-50%, -50%) scale(1.3);
+                box-shadow: 0 0 15px rgba(0, 212, 255, 0.9);
+            }
+            
+            .custom-cursor.hovering .cursor-pulse {
+                opacity: 0.9;
+                transform: translate(-50%, -50%) scale(1);
+                animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            }
+            
+            .custom-cursor.clicking .cursor-trail {
+                transform: translate(-50%, -50%) scale(0.85);
+                transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                border-width: 4px;
+            }
+            
+            .custom-cursor.clicking .cursor-dot {
+                transform: translate(-50%, -50%) scale(0.6);
+                transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                background: var(--accent);
+            }
+            
+            @keyframes pulse-ring {
+                0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.9; }
+                50% { opacity: 0.5; }
+                100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+            }
+        `;
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = styles;
+        document.head.appendChild(styleSheet);
+    }
+
+    initEventListeners() {
+        // Mouse movement tracking with debounce for better performance
+        let mouseMoveTimeout;
+        document.addEventListener('mousemove', (e) => {
+            clearTimeout(mouseMoveTimeout);
+            mouseMoveTimeout = setTimeout(() => this.onMouseMove(e), 5); // Small debounce for smoother performance
+        });
+        document.addEventListener('mouseenter', () => this.setVisibility(true));
+        document.addEventListener('mouseleave', () => this.setVisibility(false));
+        
+        // Click state tracking
+        document.addEventListener('mousedown', () => this.setClickState(true));
+        document.addEventListener('mouseup', () => this.setClickState(false));
+
+        // Interactive elements hover detection - expanded selector for better coverage
+        const hoverElements = document.querySelectorAll('a, button, .section, input, select, textarea, li, table, th, td, h1, h2, form');
+        hoverElements.forEach(element => {
+            element.addEventListener('mouseenter', () => this.setHoverState(true));
+            element.addEventListener('mouseleave', () => this.setHoverState(false));
+        });
+        
+        // Add global hover detection for elements added dynamically
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            if (target.tagName && ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'LI', 'TABLE', 'TH', 'TD', 'H1', 'H2', 'FORM'].includes(target.tagName) || 
+                target.classList.contains('section')) {
+                this.setHoverState(true);
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target;
+            if (target.tagName && ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'LI', 'TABLE', 'TH', 'TD', 'H1', 'H2', 'FORM'].includes(target.tagName) || 
+                target.classList.contains('section')) {
+                this.setHoverState(false);
+            }
+        });
+    }
+
+    onMouseMove(e) {
+        this.target.x = e.clientX;
+        this.target.y = e.clientY;
+    }
+
+    setVisibility(visible) {
+        this.isVisible = visible;
+        this.cursor.classList.toggle('hidden', !visible);
+    }
+
+    setHoverState(hovering) {
+        this.isHovering = hovering;
+        this.cursor.classList.toggle('hovering', hovering);
+    }
+    
+    setClickState(clicking) {
+        this.isClicking = clicking;
+        this.cursor.classList.toggle('clicking', clicking);
+    }
+
+    animate() {
+        // Calculate velocity for smoother movement with adaptive easing
+        const distanceX = this.target.x - this.position.x;
+        const distanceY = this.target.y - this.position.y;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        
+        // Adaptive easing: faster when cursor is far away, smoother when close
+        const adaptiveEase = this.isHovering ? 0.25 : Math.min(0.15 + (distance / 500), 0.3);
+        
+        // Calculate velocity with improved smoothing
+        this.velocity.x = (this.target.x - this.position.x) * adaptiveEase;
+        this.velocity.y = (this.target.y - this.position.y) * adaptiveEase;
+        
+        // Update position with velocity and add slight inertia
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+
+        // Apply position with hardware acceleration hint
+        this.cursor.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0)`;
+        this.cursor.style.left = '0';
+        this.cursor.style.top = '0';
+
+        // Continue animation loop with optimized binding
+        if (!this._animateBound) {
+            this._animateBound = this.animate.bind(this);
+        }
+        requestAnimationFrame(this._animateBound);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!CustomCursor.instance) {
+        new CustomCursor();
+    }
+    
+    // Initialize particle system
+    new ParticleSystem();
+});
+</script>
+
+<script>
+class ParticleSystem {
+    constructor() {
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.mouseX = 0;
+        this.mouseY = 0;
+        this.animationFrame = null;
+        this.isActive = false;
+        
+        // Glow effect settings
+        this.glowRadius = 150; // Mouse proximity radius for glow effect
+        this.maxGlowIntensity = 0.4; // Maximum glow intensity
+        
+        // Matrix-style green pixel theme colors (more vibrant and varied)
+        this.colors = [
+            'rgba(0, 255, 70, 0.85)',    // Bright matrix green
+            'rgba(0, 220, 60, 0.82)',    // Medium matrix green
+            'rgba(0, 190, 45, 0.8)',     // Dark matrix green
+            'rgba(60, 255, 130, 0.87)',  // Light matrix green
+            'rgba(30, 230, 90, 0.83)',   // Muted matrix green
+            'rgba(100, 255, 150, 0.85)', // Pale matrix green
+        ];
+        
+        // Glow colors (more intense versions of matrix green theme)
+        this.glowColors = [
+            'rgba(0, 255, 70, 1.0)',      // Bright matrix green glow
+            'rgba(120, 255, 160, 1.0)',   // Light matrix green glow
+            'rgba(180, 255, 200, 1.0)',   // Very light matrix green glow
+            'rgba(0, 230, 100, 1.0)',     // Medium matrix green glow
+        ];
+        
+        // Wave motion parameters - enhanced for more visible wave effect
+        this.waveAmplitude = 5.0;         // Increased wave height
+        this.waveFrequency = 0.025;       // Optimized wave frequency
+        this.waveSpeed = 0.012;           // Optimized wave movement speed
+        this.time = 0;                    // Time variable for wave animation
+        
+        // Gravitational parameters
+        this.gravitationalConstant = 0.2; // Stronger gravitational pull
+        this.maxForce = 2.5;             // Maximum force to prevent extreme acceleration
+        
+        // Initialize the system
+        this.init();
+    }
+    
+    init() {
+        // Setup canvas
+        this.canvas.classList.add('particle-canvas');
+        this.canvas.style.position = 'fixed';
+        this.canvas.style.top = '0';
+        this.canvas.style.left = '0';
+        this.canvas.style.width = '100%';
+        this.canvas.style.height = '100%';
+        this.canvas.style.pointerEvents = 'none';
+        this.canvas.style.zIndex = '0';
+        document.body.appendChild(this.canvas);
+        
+        // Set canvas to full screen
+        this.resizeCanvas();
+        
+        // Create initial particles
+        this.createParticles();
+        
+        // Add event listeners
+        window.addEventListener('resize', () => this.resizeCanvas());
+        document.addEventListener('mousemove', (e) => {
+            this.mouseX = e.clientX;
+            this.mouseY = e.clientY;
+        });
+        
+        // Start animation
+        this.animate();
+        this.isActive = true;
+    }
+    
+    resizeCanvas() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        
+        // Recreate particles when resizing
+        this.createParticles();
+    }
+    
+    createParticles() {
+        // Clear existing particles
+        this.particles = [];
+        
+        // Calculate number of particles based on screen size with improved density
+        const particleCount = Math.floor((window.innerWidth * window.innerHeight) / 5000); // Higher density
+        
+        // Create a more defined grid-like distribution of particles
+        const gridSize = Math.sqrt(particleCount);
+        const cellWidth = this.canvas.width / gridSize;
+        const cellHeight = this.canvas.height / gridSize;
+        
+        // Create particles with varying properties for more visual interest
+        for (let i = 0; i < particleCount; i++) {
+            const colorIndex = Math.floor(Math.random() * this.colors.length);
+            const glowColorIndex = Math.floor(Math.random() * this.glowColors.length);
+            
+            // Calculate grid position with controlled randomness for better grid appearance
+            const col = i % gridSize;
+            const row = Math.floor(i / gridSize);
+            
+            // Add slight jitter to grid positions (less randomness for more grid-like appearance)
+            const jitterFactor = 0.4; // Reduced from 0.5 for more grid-like structure
+            const x = col * cellWidth + (Math.random() * cellWidth * jitterFactor);
+            const y = row * cellHeight + (Math.random() * cellHeight * jitterFactor);
+            
+            // Create square-shaped particle with size variation for visual hierarchy
+            // Some particles slightly larger to create focal points
+            const sizeVariation = Math.random();
+            const size = sizeVariation > 0.9 ? 
+                         Math.random() * 3 + 2.5 : // 10% larger particles
+                         Math.random() * 1.8 + 1.8; // 90% standard size
+            
+            // Vary particle properties based on position for more organic feel
+            const distanceFromCenter = Math.sqrt(
+                Math.pow((x / this.canvas.width) - 0.5, 2) + 
+                Math.pow((y / this.canvas.height) - 0.5, 2)
+            );
+            
+            // Create particle with enhanced properties
+            this.particles.push({
+                x: x,
+                y: y,
+                size: size,
+                baseSize: size,
+                speedX: (Math.random() - 0.5) * 0.15, // Slower initial movement for more control
+                speedY: (Math.random() - 0.5) * 0.15,
+                color: this.colors[colorIndex],
+                glowColor: this.glowColors[glowColorIndex],
+                opacity: Math.random() * 0.7 + 0.3, // Higher base opacity
+                baseOpacity: Math.random() * 0.7 + 0.3,
+                // Wave motion properties with phase variation based on position
+                originalX: x,
+                originalY: y,
+                phase: Math.random() * Math.PI * 2 + (distanceFromCenter * Math.PI), // Position-dependent phase
+                // Glow effect properties
+                glowIntensity: 0,
+                distanceToMouse: Infinity,
+                // Shape type (square for pixel-like appearance)
+                isSquare: true,
+                // Mass varies slightly with size for more realistic physics
+                mass: (size / 4) * (Math.random() * 0.4 + 0.8),
+                // Add energy level for varying behavior
+                energy: Math.random(),
+                // Add unique ID for tracking
+                id: i
+            });
+        }
+    }
+    
+    drawParticles() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Sort particles by glow intensity to render glowing particles on top
+        const sortedParticles = [...this.particles].sort((a, b) => a.glowIntensity - b.glowIntensity);
+        
+        // First draw connecting lines between particles with improved opacity
+        this.ctx.globalAlpha = 0.4; // Increased from 0.3 for better visibility
+        
+        // Optimize line drawing by only checking particles within a certain distance
+        const connectionDistance = 120; // Increased connection distance for more visible grid
+        const gridSize = Math.ceil(Math.max(this.canvas.width, this.canvas.height) / connectionDistance);
+        const grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => []));
+        
+        // Place particles in grid cells for faster neighbor lookup
+        this.particles.forEach(particle => {
+            const cellX = Math.floor(particle.x / connectionDistance);
+            const cellY = Math.floor(particle.y / connectionDistance);
+            if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
+                grid[cellX][cellY].push(particle);
+            }
+        });
+        
+        // Draw connections using spatial grid for optimization
+        sortedParticles.forEach(particle => {
+            const cellX = Math.floor(particle.x / connectionDistance);
+            const cellY = Math.floor(particle.y / connectionDistance);
+            
+            // Check only neighboring cells
+            for (let i = Math.max(0, cellX - 1); i <= Math.min(gridSize - 1, cellX + 1); i++) {
+                for (let j = Math.max(0, cellY - 1); j <= Math.min(gridSize - 1, cellY + 1); j++) {
+                    grid[i][j].forEach(otherParticle => {
+                        if (particle === otherParticle) return;
+                        
+                        const dx = particle.x - otherParticle.x;
+                        const dy = particle.y - otherParticle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        // Draw grid-like connections between nearby particles
+                        if (distance < connectionDistance) {
+                            // Enhanced line opacity based on glow intensity and distance
+                            const lineOpacity = 0.25 * (1 - distance / connectionDistance) * 
+                                               (1 + Math.max(particle.glowIntensity, otherParticle.glowIntensity) * 2.5);
+                            
+                            // Use gradient for lines to create more depth
+                            const gradient = this.ctx.createLinearGradient(
+                                particle.x, particle.y, otherParticle.x, otherParticle.y
+                            );
+                            
+                            // Determine colors based on glow intensity
+                            const startColor = particle.glowIntensity > 0 ? 
+                                `rgba(0, 255, 100, ${lineOpacity * 1.2})` : 
+                                `rgba(0, 220, 70, ${lineOpacity})`;
+                                
+                            const endColor = otherParticle.glowIntensity > 0 ? 
+                                `rgba(0, 255, 100, ${lineOpacity * 1.2})` : 
+                                `rgba(0, 220, 70, ${lineOpacity})`;
+                            
+                            gradient.addColorStop(0, startColor);
+                            gradient.addColorStop(1, endColor);
+                            
+                            this.ctx.beginPath();
+                            this.ctx.strokeStyle = gradient;
+                            this.ctx.lineWidth = 0.8 * (1 + Math.max(particle.glowIntensity, otherParticle.glowIntensity));
+                            this.ctx.moveTo(particle.x, particle.y);
+                            this.ctx.lineTo(otherParticle.x, otherParticle.y);
+                            this.ctx.stroke();
+                        }
+                    });
+                }
+            }
+        });
+        
+        this.ctx.globalAlpha = 1.0;
+        
+        // Then draw particles
+        sortedParticles.forEach(particle => {
+            // Draw glow effect for particles near the mouse
+            if (particle.glowIntensity > 0) {
+                // Create glow effect for square particles
+                const glowSize = particle.size * (2.5 + particle.glowIntensity * 3);
+                
+                // Extract RGB values from the particle's glow color
+                const colorMatch = particle.glowColor.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+                if (colorMatch) {
+                    const [_, r, g, b] = colorMatch;
+                    
+                    // Create radial gradient for more realistic glow
+                    const gradient = this.ctx.createRadialGradient(
+                        particle.x, particle.y, 0,
+                        particle.x, particle.y, glowSize/2
+                    );
+                    
+                    gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.9 * particle.glowIntensity})`);
+                    gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+                    
+                    // Draw glow as a circle with gradient
+                    this.ctx.beginPath();
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.arc(particle.x, particle.y, glowSize/2, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // Add a small bright center for more visual impact
+                    this.ctx.beginPath();
+                    this.ctx.fillStyle = `rgba(${r}, 255, ${b}, ${0.9 * particle.glowIntensity})`;
+                    this.ctx.arc(particle.x, particle.y, particle.size * 0.8, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+            }
+            
+            // Draw the particle as a square (pixel-like) with rounded corners for a more polished look
+            if (particle.isSquare) {
+                // Use a slightly rounded rectangle for a more polished look
+                const cornerRadius = particle.size * 0.2;
+                const x = particle.x - particle.size/2;
+                const y = particle.y - particle.size/2;
+                const size = particle.size;
+                
+                this.ctx.fillStyle = particle.color;
+                this.ctx.beginPath();
+                this.ctx.moveTo(x + cornerRadius, y);
+                this.ctx.lineTo(x + size - cornerRadius, y);
+                this.ctx.quadraticCurveTo(x + size, y, x + size, y + cornerRadius);
+                this.ctx.lineTo(x + size, y + size - cornerRadius);
+                this.ctx.quadraticCurveTo(x + size, y + size, x + size - cornerRadius, y + size);
+                this.ctx.lineTo(x + cornerRadius, y + size);
+                this.ctx.quadraticCurveTo(x, y + size, x, y + size - cornerRadius);
+                this.ctx.lineTo(x, y + cornerRadius);
+                this.ctx.quadraticCurveTo(x, y, x + cornerRadius, y);
+                this.ctx.closePath();
+                this.ctx.fill();
+            } else {
+                // Draw as a circle
+                this.ctx.fillStyle = particle.color;
+                this.ctx.beginPath();
+                this.ctx.arc(particle.x, particle.y, particle.size/2, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+        });
+    }
+    
+    updateParticles() {
+        // Update time for wave animation
+        this.time += this.waveSpeed;
+        
+        this.particles.forEach(particle => {
+            // Calculate distance to mouse
+            const dx = this.mouseX - particle.x;
+            const dy = this.mouseY - particle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            particle.distanceToMouse = distance;
+            
+            // Update glow intensity based on mouse proximity
+            if (distance < this.glowRadius) {
+                // Inverse relationship: closer = more intense with exponential falloff
+                particle.glowIntensity = this.maxGlowIntensity * Math.pow(1 - distance / this.glowRadius, 1.5);
+                
+                // More noticeable size increase when glowing
+                particle.size = particle.baseSize * (1 + particle.glowIntensity * 1.5);
+                
+                // Enhanced gravitational attraction toward mouse with improved physics
+                // Use inverse square law with smoothing for more realistic gravity
+                const forceMagnitude = this.gravitationalConstant * particle.mass / (distance * distance + 0.1);
+                
+                // Limit maximum force to prevent extreme acceleration
+                const cappedForceMagnitude = Math.min(forceMagnitude, this.maxForce);
+                
+                // Apply force with direction and energy-based variation
+                const normalizedDx = dx / distance;
+                const normalizedDy = dy / distance;
+                
+                // Energy level affects how strongly particle responds to mouse
+                const energyFactor = 0.8 + (particle.energy * 0.4); // 0.8-1.2 range
+                
+                // Apply force with smoother acceleration
+                particle.speedX += normalizedDx * cappedForceMagnitude * energyFactor;
+                particle.speedY += normalizedDy * cappedForceMagnitude * energyFactor;
+                
+                // Add slight orbital tendency for more interesting motion
+                const tangentialFactor = 0.1 * particle.energy;
+                particle.speedX += normalizedDy * tangentialFactor;
+                particle.speedY -= normalizedDx * tangentialFactor;
+            } else {
+                particle.glowIntensity = 0;
+                particle.size = particle.baseSize;
+            }
+            
+            // Calculate enhanced wave effect with improved fluid motion
+            // Wave is based on distance from original position and time with phase offset
+            const waveX = Math.sin(particle.originalX * this.waveFrequency + this.time + particle.phase) * this.waveAmplitude;
+            const waveY = Math.cos(particle.originalY * this.waveFrequency + this.time * 0.8 + particle.phase * 0.5) * this.waveAmplitude;
+            
+            // Add secondary wave for more complex, organic motion
+            const secondaryWaveX = Math.cos(particle.originalY * this.waveFrequency * 0.5 + this.time * 1.2) * (this.waveAmplitude * 0.4);
+            const secondaryWaveY = Math.sin(particle.originalX * this.waveFrequency * 0.5 + this.time * 1.5) * (this.waveAmplitude * 0.3);
+            
+            // Combine primary and secondary waves
+            const combinedWaveX = waveX + secondaryWaveX;
+            const combinedWaveY = waveY + secondaryWaveY;
+            
+            // Apply stronger wave force with adaptive strength based on distance
+            // Particles farther from their target position experience stronger return force
+            const distFromWavePos = Math.sqrt(
+                Math.pow((particle.originalX + combinedWaveX) - particle.x, 2) + 
+                Math.pow((particle.originalY + combinedWaveY) - particle.y, 2)
+            );
+            
+            // Adaptive return force - stronger when far from target position
+            const returnStrength = 0.04 + Math.min(distFromWavePos / 200, 0.03);
+            
+            const returnForceX = ((particle.originalX + combinedWaveX) - particle.x) * returnStrength;
+            const returnForceY = ((particle.originalY + combinedWaveY) - particle.y) * returnStrength;
+            
+            particle.speedX += returnForceX;
+            particle.speedY += returnForceY;
+            
+            // Apply speed limits - slightly higher for more dynamic movement
+            const maxSpeed = 2.8 * (1 + particle.glowIntensity * 1.2); // Faster when glowing
+            particle.speedX = Math.max(Math.min(particle.speedX, maxSpeed), -maxSpeed);
+            particle.speedY = Math.max(Math.min(particle.speedY, maxSpeed), -maxSpeed);
+            
+            // Update position with improved physics
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+            
+            // Add subtle random movement that varies with energy level
+            // Higher energy particles have more random movement
+            const randomFactor = 0.03 + (particle.energy * 0.04);
+            particle.x += (Math.random() - 0.5) * randomFactor;
+            particle.y += (Math.random() - 0.5) * randomFactor;
+            
+            // Add subtle pulsing effect to glowing particles
+            if (particle.glowIntensity > 0) {
+                particle.size = particle.baseSize * (1 + particle.glowIntensity * 1.5 + Math.sin(this.time * 3 + particle.id) * 0.1);
+            }
+            
+            // Boundary check with wrapping
+            if (particle.x < 0) particle.x = this.canvas.width;
+            if (particle.x > this.canvas.width) particle.x = 0;
+            if (particle.y < 0) particle.y = this.canvas.height;
+            if (particle.y > this.canvas.height) particle.y = 0;
+            
+            // Apply adaptive friction to gradually slow particles
+            // Less friction when glowing or near mouse for more responsive movement
+            const baseFriction = 0.965;
+            const glowBoost = particle.glowIntensity * 0.025;
+            const distanceInfluence = Math.max(0, 0.01 * (1 - particle.distanceToMouse / 300));
+            const frictionFactor = baseFriction + glowBoost + distanceInfluence;
+            
+            // Apply friction with slight variation based on energy level
+            particle.speedX *= frictionFactor - (Math.random() * 0.005);
+            particle.speedY *= frictionFactor - (Math.random() * 0.005);
+        });
+        
+        // Enhanced particle interaction - improved N-body simulation with matrix-style behavior
+        // Only calculate interactions between particles that are close to each other
+        for (let i = 0; i < this.particles.length; i++) {
+            const particleA = this.particles[i];
+            
+            for (let j = i + 1; j < this.particles.length; j++) {
+                const particleB = this.particles[j];
+                
+                const dx = particleB.x - particleA.x;
+                const dy = particleB.y - particleA.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Only interact if particles are close enough
+                if (distance < 60 && distance > 0) { // Increased interaction radius
+                    // Calculate interaction strength based on both particles' properties
+                    // Particles with higher energy interact more strongly
+                    const interactionStrength = 0.0008 * particleA.mass * particleB.mass / (distance * distance);
+                    
+                    // Direction vectors
+                    const normalizedDx = dx / distance;
+                    const normalizedDy = dy / distance;
+                    
+                    // Determine if particles should attract or repel based on their properties
+                    // This creates more interesting patterns in the matrix grid
+                    const energyDifference = Math.abs(particleA.energy - particleB.energy);
+                    
+                    // Similar energy levels attract, different energy levels have weaker interaction
+                    const attractionFactor = 1 - (energyDifference * 0.8);
+                    
+                    // Apply forces with energy-based variation
+                    const finalForce = interactionStrength * attractionFactor;
+                    
+                    // Apply stronger forces to glowing particles for more dramatic effect near cursor
+                    const glowMultiplier = 1 + Math.max(particleA.glowIntensity, particleB.glowIntensity) * 2;
+                    
+                    // Apply forces (attraction/repulsion)
+                    particleA.speedX += normalizedDx * finalForce * glowMultiplier;
+                    particleA.speedY += normalizedDy * finalForce * glowMultiplier;
+                    particleB.speedX -= normalizedDx * finalForce * glowMultiplier;
+                    particleB.speedY -= normalizedDy * finalForce * glowMultiplier;
+                    
+                    // Add slight rotational component for more interesting motion
+                    if (Math.random() > 0.7 && (particleA.glowIntensity > 0 || particleB.glowIntensity > 0)) {
+                        const rotationStrength = 0.0002 * glowMultiplier;
+                        particleA.speedX += normalizedDy * rotationStrength;
+                        particleA.speedY -= normalizedDx * rotationStrength;
+                        particleB.speedX -= normalizedDy * rotationStrength;
+                        particleB.speedY += normalizedDx * rotationStrength;
+                    }
+                }
+            }
+        }
+    }
+    }
+    
+    animate() {
+        this.updateParticles();
+        this.drawParticles();
+        this.animationFrame = requestAnimationFrame(this.animate.bind(this));
+    }
+}
+</script>
+
+</body>
+</html>
